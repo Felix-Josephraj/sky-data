@@ -1,26 +1,22 @@
 import { notFound } from 'next/navigation'
 import ContentHeader from '@/components/ContentHeader'
 import ContentViewsChart from '@/components/ContentViewsChart'
-
-async function fetchContentData() {
-  const res = await fetch('https://my-json-server.typicode.com/alb90/aieng-tech-test-assets/data', {
-    cache: 'no-store',
-  })
-  if (!res.ok) throw new Error('Failed to fetch content data')
-  return res.json()
-}
+import { ContentItem } from '@/types/content'
+import { fetchContentData } from '@/lib/fetchContent'
 
 interface ContentDetailProps {
   params: { name: string }
 }
 
 export default async function ContentDetail({ params }: ContentDetailProps) {
-  const contentData = await fetchContentData()
-  const contentItem = contentData.find(
-    (item) => item.name.toLowerCase() === decodeURIComponent(params.name).toLowerCase()
-  )
-
-  if (!contentItem) {
+  let contentItem: ContentItem | undefined
+  try {
+    const contentData: ContentItem[] = await fetchContentData()
+    contentItem = contentData.find((item) => item.name.toLowerCase() === decodeURIComponent(params.name).toLowerCase())
+    if (!contentItem) {
+      notFound()
+    }
+  } catch (e) {
     notFound()
   }
 
