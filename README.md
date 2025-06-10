@@ -1,5 +1,11 @@
 ## Getting Started
 
+### Clone the repository:
+
+```bash
+git clone https://github.com/Felix-Josephraj/sky-data
+```
+
 ### Install dependencies:
 
 ```bash
